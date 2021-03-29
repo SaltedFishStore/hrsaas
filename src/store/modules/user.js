@@ -19,10 +19,8 @@ const mutations = {
 
 const actions = {
   async login(context, data) {
-    const response = await login(data)
-    if (response.data.success) {
-      context.commit('setToken', response.data.data)
-    }
+    const result = await login(data)
+    context.commit('setToken', result)
   }
 }
 
