@@ -12,7 +12,7 @@ service.interceptors.request.use()
 // 响应拦截器
 service.interceptors.response.use(
   response => {
-    const { success, message, data } = response
+    const { success, message, data } = response.data
     if (success) {
       return data // 成功直接返回数据
     } else {
