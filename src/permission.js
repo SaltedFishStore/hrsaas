@@ -10,7 +10,7 @@ router.beforeEach(async(to, from, next) => {
   NProgress.start() // 开启进度条
   // 判断是否有token
   if (store.getters.token) {
-    if (to.path === 'login') { // 有token跳转登录页
+    if (to.path === '/login') { // 有token跳转登录页
       next('/') // 跳转到首页
     } else {
       // 只有在用户拥有token，并且直接放行的情况下

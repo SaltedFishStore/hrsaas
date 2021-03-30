@@ -38,6 +38,11 @@ const actions = {
     const baseResult = { ...result, ...baseInfo }
     context.commit('setUserInfo', baseResult)
     return result
+  },
+  // 退出登录
+  lgout(context) {
+    context.commit('removeToken') // 删除token
+    context.commit('removeUserInfo') // 删除用户信息
   }
 }
 

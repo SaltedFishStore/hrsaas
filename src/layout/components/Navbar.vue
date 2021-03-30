@@ -34,9 +34,10 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, createNamespacedHelpers } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+const { mapActions } = createNamespacedHelpers('user')
 
 export default {
   components: {
@@ -57,12 +58,15 @@ export default {
     ])
   },
   methods: {
+    ...mapActions(['lgout']),
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
-    async logout() {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    logout() {
+      // 调用登出的action
+      this.lgout()
+      // 跳转登录页
+      this.$router.push('/login')
     }
   }
 }
