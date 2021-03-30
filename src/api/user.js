@@ -6,7 +6,7 @@ import request from '@/utils/request'
  */
 export function login(data) {
   return request({
-    url: '/api/sys/login',
+    url: '/sys/login',
     method: 'post',
     data
   })
@@ -19,6 +19,15 @@ export function getUserInfo() {
   return request({
     url: '/sys/profile',
     method: 'post'
+  })
+}
+/**
+ * 获取某个用户信息
+ * @param {*} id
+ */
+export function getUserDetailById(id) {
+  return request({
+    url: `/sys/user/${id}`
   })
 }
 

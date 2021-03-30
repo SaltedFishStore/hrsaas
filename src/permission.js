@@ -6,13 +6,19 @@ import 'nprogress/nprogress.css'
 const whiteList = ['/login', '/404'] // 白名单
 
 // 路由前置守卫
-router.beforeEach((to, from, next) => {
+router.beforeEach(async(to, from, next) => {
   NProgress.start() // 开启进度条
   // 判断是否有token
   if (store.getters.token) {
     if (to.path === 'login') { // 有token跳转登录页
       next('/') // 跳转到首页
     } else {
+      // 只有在用户拥有token，并且直接放行的情况下
+      // 先判断之前有没有获取资料
+      if (!store.getters.userId) {
+        // 如果没有userId，调用vuex获取用户资料的action
+        await store.dispatch('user/getUserInfo')
+      }
       next()
     }
   } else {
