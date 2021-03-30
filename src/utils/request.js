@@ -42,8 +42,15 @@ service.interceptors.response.use(
     }
   },
   error => {
-    Message(error.message) // 提示错误
-    return Promise.reject(error) // 返回错误
+    if (error.response.data.code === 10002) {
+      //  当状态码为10002时 表示后端告诉我 超时了
+      store.dispatch('user/lgout') // 调用登出的action
+      router.push('/login') // 回到登录页
+      return Promise.reject(new Error('超时了')) // 返回错误
+    } else {
+      Message(error.message) // 提示错误
+      return Promise.reject(error) // 返回错误
+    }
   }
 )
 
