@@ -11,7 +11,8 @@ export default {
       component: () => import('@/views/permission'),
       // 路由元信息
       meta: {
-        title: '权限管理'
+        title: '权限管理',
+        icon: 'lock'
       }
     }
   ]

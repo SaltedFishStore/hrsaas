@@ -11,7 +11,8 @@ export default {
       component: () => import('@/views/salarys'),
       // 路由元信息
       meta: {
-        title: '工资'
+        title: '工资',
+        icon: 'money'
       }
     }
   ]

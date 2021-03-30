@@ -11,7 +11,8 @@ export default {
       component: () => import('@/views/departments'),
       // 路由元信息
       meta: {
-        title: '组织架构'
+        title: '组织架构',
+        icon: 'tree'
       }
     }
   ]

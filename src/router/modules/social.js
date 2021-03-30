@@ -11,7 +11,8 @@ export default {
       component: () => import('@/views/social'),
       // 路由元信息
       meta: {
-        title: '社保'
+        title: '社保',
+        icon: 'table'
       }
     }
   ]

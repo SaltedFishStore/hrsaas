@@ -11,7 +11,8 @@ export default {
       component: () => import('@/views/approvals'),
       // 路由元信息
       meta: {
-        title: '审批'
+        title: '审批',
+        icon: 'tree-table'
       }
     }
   ]

@@ -11,7 +11,8 @@ export default {
       component: () => import('@/views/employees'),
       // 路由元信息
       meta: {
-        title: '员工管理'
+        title: '员工管理',
+        icon: 'people'
       }
     }
   ]

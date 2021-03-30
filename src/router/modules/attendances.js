@@ -11,7 +11,8 @@ export default {
       component: () => import('@/views/attendances'),
       // 路由元信息
       meta: {
-        title: '考勤'
+        title: '考勤',
+        icon: 'skill'
       }
     }
   ]
