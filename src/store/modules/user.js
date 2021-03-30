@@ -1,4 +1,4 @@
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, SetTimestamp } from '@/utils/auth'
 import { login, getUserInfo, getUserDetailById } from '@/api/user'
 
 const state = {
@@ -30,6 +30,7 @@ const actions = {
   async login(context, data) {
     const result = await login(data)
     context.commit('setToken', result)
+    SetTimestamp() // 将最新时间戳写入缓存
   },
   // 获取用户信息
   async getUserInfo(context) {
