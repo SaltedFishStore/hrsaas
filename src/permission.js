@@ -1,6 +1,6 @@
 import router from '@/router'
 import store from '@/store'
-import NProgress  from 'nprogress'
+import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
 const whiteList = ['/login', '/404'] // 白名单
