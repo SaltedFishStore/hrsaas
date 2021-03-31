@@ -14,6 +14,8 @@
 
 <script>
 import TreeTools from './components/tree-tools'
+import { getDepartments } from '@/api/departments'
+import { transListToTreeData } from '@/utils'
 
 export default {
   components: {
@@ -21,18 +23,21 @@ export default {
   },
   data() {
     return {
-      departs: [
-        { name: '总裁办', manager: '朱小明', children: [{ name: '董事会' }] },
-        { name: '行政部', manager: '球球' },
-        { name: '人事部', manager: '茅台' }
-      ],
+      departs: [],
       defaultProps: {
         label: 'name'
       },
-      company: {
-        name: '江苏传智播客教育科技股份有限公司',
-        manager: '负责人'
-      }
+      company: {}
+    }
+  },
+  created() {
+    this.getDepartments()
+  },
+  methods: {
+    async getDepartments() {
+      const result = await getDepartments()
+      this.company = { name: result.companyName, manager: '负责人' }
+      this.departs = transListToTreeData(result.depts, '')
     }
   }
 }
