@@ -5,7 +5,7 @@
         <tree-tools :tree-node="company" is-root />
 
         <el-tree :data="departs" :props="defaultProps" default-expand-all>
-          <tree-tools slot-scope="{ data }" :tree-node="data" @delDepts="delDepts" />
+          <tree-tools slot-scope="{ data }" :tree-node="data" @delDepts="getDepartments" />
         </el-tree>
       </el-card>
     </div>
@@ -39,10 +39,6 @@ export default {
       const result = await getDepartments()
       this.company = { name: result.companyName, manager: '负责人' }
       this.departs = transListToTreeData(result.depts, '')
-    },
-    // 删除成功，更新数据
-    delDepts() {
-      this.getDepartments()
     }
   }
 }
