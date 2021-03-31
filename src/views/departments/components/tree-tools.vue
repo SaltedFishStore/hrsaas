@@ -43,6 +43,8 @@ export default {
     operateDepts(type) {
       if (type === 'add') {
         // 添加子部门
+        // 通知父组件显示弹层
+        this.$emit('addDepts', this.treeNode)
       } else if (type === 'edit') {
         // 编辑部门
       } else {
