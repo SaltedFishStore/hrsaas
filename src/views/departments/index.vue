@@ -11,7 +11,7 @@
     </div>
 
     <!-- 弹层组件 -->
-    <add-dept :show-dialog="showDialog" :tree-node="node" />
+    <add-dept :show-dialog.sync="showDialog" :tree-node="node" @addDepts="getDepartments" />
   </div>
 </template>
 
