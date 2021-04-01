@@ -11,7 +11,7 @@ export default {
       component: () => import('@/views/setting'),
       // 路由元信息
       meta: {
-        title: '设置',
+        title: '公司设置',
         icon: 'setting'
       }
     }
