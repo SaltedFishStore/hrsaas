@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard-container">
+  <div v-loading="loading" class="dashboard-container">
     <div class="app-container">
       <el-card class="tree-card">
         <tree-tools :tree-node="company" is-root @addDepts="addDepts" />
@@ -34,7 +34,8 @@ export default {
       },
       company: {},
       showDialog: false, // 控制弹层组件的显示隐藏
-      node: null // 存储点击新增时的部门
+      node: null, // 存储点击新增时的部门
+      loading: false
     }
   },
   created() {
@@ -43,9 +44,11 @@ export default {
   methods: {
     //  获取组织架构
     async getDepartments() {
+      this.loading = true // 显示loading
       const result = await getDepartments()
       this.company = { name: result.companyName, manager: '负责人', id: '' }
       this.departs = transListToTreeData(result.depts, '')
+      this.loading = false // 关闭loading
     },
     // 添加子部门
     addDepts(node) {
