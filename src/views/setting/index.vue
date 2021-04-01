@@ -5,7 +5,7 @@
         <el-tabs>
           <el-tab-pane label="角色管理">
             <el-row style="height: 60px;">
-              <el-button type="primary" icon="el-icon-plus" size="small">新增角色</el-button>
+              <el-button type="primary" icon="el-icon-plus" size="small" @click="showDialog = true">新增角色</el-button>
             </el-row>
             <!-- 表格 -->
             <el-table v-loading="loading" :data="roleList" border>

@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { getRoleDetail, updateRole } from '@/api/setting'
+import { getRoleDetail, updateRole, addRole } from '@/api/setting'
 
 export default {
   props: {
@@ -48,7 +48,7 @@ export default {
             await updateRole(this.roleForm)
           } else {
             // 新增
-            console.log(2)
+            await addRole(this.roleForm)
           }
           // 表单校验重置
           this.$refs.roleForm.resetFields()
