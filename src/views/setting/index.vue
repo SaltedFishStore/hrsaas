@@ -8,11 +8,11 @@
               <el-button type="primary" icon="el-icon-plus" size="small">新增角色</el-button>
             </el-row>
             <!-- 表格 -->
-            <el-table border>
-              <el-table-column label="序号" width="120" />
-              <el-table-column label="角色名称" width="240" />
-              <el-table-column label="角色描述" />
-              <el-table-column label="操作">
+            <el-table v-loading="loading" :data="roleList" border>
+              <el-table-column header-align="center" align="center" type="index" label="序号" width="120" />
+              <el-table-column header-align="center" align="center" prop="name" label="角色名称" width="240" />
+              <el-table-column header-align="center" prop="description" label="角色描述" />
+              <el-table-column header-align="center" align="center" label="操作">
                 <el-button size="mini" type="success">分配权限</el-button>
                 <el-button size="mini" type="primary">编辑</el-button>
                 <el-button size="mini" type="danger">删除</el-button>
@@ -21,7 +21,13 @@
 
             <!-- 分页 -->
             <el-row type="flex" align="middle" justify="end" style="height: 60px;">
-              <el-pagination layout="prev, pager ,next" />
+              <el-pagination
+                layout="prev, pager ,next"
+                :total="page.total"
+                :page-size="page.pagesize"
+                :current-page="page.page"
+                @current-change="changePage"
+              />
             </el-row>
           </el-tab-pane>
           <el-tab-pane label="公司信息">
@@ -53,7 +59,38 @@
 </template>
 
 <script>
-export default {}
+import { getRoleList } from '@/api/setting'
+
+export default {
+  data() {
+    return {
+      roleList: [], // 角色列表
+      page: {
+        page: 1,
+        pagesize: 2,
+        total: 0
+      },
+      loading: false
+    }
+  },
+  created() {
+    this.getRoleList()
+  },
+  methods: {
+    // 获取角色列表
+    async getRoleList() {
+      this.loading = true
+      const { total, rows } = await getRoleList(this.page)
+      this.page.total = total
+      this.roleList = rows
+      this.loading = false
+    },
+    changePage(newPage) {
+      this.page.page = newPage
+      this.getRoleList()
+    }
+  }
+}
 </script>
 
 <style>
