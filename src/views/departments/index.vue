@@ -11,7 +11,7 @@
     </div>
 
     <!-- 弹层组件 -->
-    <add-dept :show-dialog="showDialog" />
+    <add-dept :show-dialog="showDialog" :tree-node="node" />
   </div>
 </template>
 
@@ -44,7 +44,7 @@ export default {
     //  获取组织架构
     async getDepartments() {
       const result = await getDepartments()
-      this.company = { name: result.companyName, manager: '负责人' }
+      this.company = { name: result.companyName, manager: '负责人', id: '' }
       this.departs = transListToTreeData(result.depts, '')
     },
     // 添加子部门
