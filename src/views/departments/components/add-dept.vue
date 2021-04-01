@@ -2,17 +2,19 @@
   <el-dialog title="新增部门" :visible="showDialog">
     <!-- label-width设置label宽度 -->
     <el-form label-width="120px" :model="formData" :rules="rules">
-      <el-form-item style="width: 80%" label="部门名称" prop="name">
-        <el-input v-model="formData.name" placeholder="1-50个字符" />
+      <el-form-item label="部门名称" prop="name">
+        <el-input v-model="formData.name" placeholder="1-50个字符" style="width: 80%" />
       </el-form-item>
-      <el-form-item style="width: 80%" label="部门编码" prop="code">
-        <el-input v-model="formData.code" placeholder="1-50个字符" />
+      <el-form-item label="部门编码" prop="code">
+        <el-input v-model="formData.code" placeholder="1-50个字符" style="width: 80%" />
       </el-form-item>
-      <el-form-item style="width: 80%" label="部门负责人" prop="manager">
-        <el-select v-model="formData.manager" placeholder="请选择" />
+      <el-form-item label="部门负责人" prop="manager">
+        <el-select v-model="formData.manager" placeholder="请选择" style="width: 80%" @focus="getEmployeesSimple">
+          <el-option v-for="item in peoples" :key="item.id" :label="item.username" :value="item.username" />
+        </el-select>
       </el-form-item>
-      <el-form-item style="width: 80%" label="部门介绍" prop="introduce">
-        <el-input v-model="formData.introduce" type="textarea" :rows="3" placeholder="1-300个字符" />
+      <el-form-item label="部门介绍" prop="introduce">
+        <el-input v-model="formData.introduce" type="textarea" :rows="3" placeholder="1-300个字符" style="width: 80%" />
       </el-form-item>
     </el-form>
     <!-- el-dialog有底部插槽 -->
@@ -27,6 +29,7 @@
 
 <script>
 import { getDepartments } from '@/api/departments'
+import { getEmployeesSimple } from '@/api/employees'
 
 export default {
   props: {
@@ -56,7 +59,6 @@ export default {
       const isRepeat = depts.some(item => item.code === value && value)
       isRepeat ? callback(new Error(`同级部门下已经有${value}的部门编码了`)) : callback()
     }
-
     return {
       // 表单数据
       formData: {
@@ -82,7 +84,14 @@ export default {
           { required: true, message: '部门介绍不能为空', triger: 'blur' },
           { min: 1, max: 300, message: '部门介绍要求1-300个字符', triger: 'blur' }
         ]
-      }
+      },
+      peoples: [] // 接受获取员工简单数据列表
+    }
+  },
+  methods: {
+    // 获取员工简单数据
+    async getEmployeesSimple() {
+      this.peoples = await getEmployeesSimple()
     }
   }
 }
