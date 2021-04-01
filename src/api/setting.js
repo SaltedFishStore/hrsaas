@@ -13,10 +13,21 @@ export function getRoleList(params) {
 
 /**
  * 根据id获取企业信息
- * @param {*}
+ * @param {*} companyId
  */
 export function getCompanyInfoById(companyId) {
   return request({
     url: `/company/${companyId}`
+  })
+}
+
+/**
+ * 删除角色
+ * @param {*} id
+ */
+export function deleteRoleById(id) {
+  return request({
+    url: `/sys/role/${id}`,
+    method: 'delete'
   })
 }
