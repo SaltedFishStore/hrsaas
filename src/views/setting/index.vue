@@ -39,16 +39,16 @@
             />
             <el-form label-width="120px" style="margin-top: 50px;">
               <el-form-item label="公司名称">
-                <el-input disabled style="width: 400px;" />
+                <el-input v-model="formData.name" disabled style="width: 400px;" />
               </el-form-item>
               <el-form-item label="公司地址">
-                <el-input disabled style="width: 400px;" />
+                <el-input v-model="formData.companyAddress" disabled style="width: 400px;" />
               </el-form-item>
               <el-form-item label="邮箱">
-                <el-input disabled style="width: 400px;" />
+                <el-input v-model="formData.mailbox" disabled style="width: 400px;" />
               </el-form-item>
               <el-form-item label="备注">
-                <el-input type="textarea" disabled style="width: 400px;" />
+                <el-input v-model="formData.remarks" type="textarea" disabled style="width: 400px;" rows="3" />
               </el-form-item>
             </el-form>
           </el-tab-pane>
@@ -59,7 +59,8 @@
 </template>
 
 <script>
-import { getRoleList } from '@/api/setting'
+import { getRoleList, getCompanyInfoById } from '@/api/setting'
+import { mapGetters } from 'vuex'
 
 export default {
   data() {
@@ -70,14 +71,18 @@ export default {
         pagesize: 2,
         total: 0
       },
-      loading: false
+      loading: false,
+      formData: {} // 接收企业数据
     }
   },
+  computed: {
+    ...mapGetters(['companyId'])
+  },
   created() {
-    this.getRoleList()
+    this.getRoleList() // 获取角色列表
+    this.getCompanyInfo() // 获取公司信息
   },
   methods: {
-    // 获取角色列表
     async getRoleList() {
       this.loading = true
       const { total, rows } = await getRoleList(this.page)
@@ -88,6 +93,9 @@ export default {
     changePage(newPage) {
       this.page.page = newPage
       this.getRoleList()
+    },
+    async getCompanyInfo() {
+      this.formData = await getCompanyInfoById(this.companyId)
     }
   }
 }
