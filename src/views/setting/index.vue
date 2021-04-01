@@ -15,7 +15,7 @@
               <el-table-column header-align="center" align="center" label="操作">
                 <template slot-scope="{ row }">
                   <el-button size="mini" type="success">分配权限</el-button>
-                  <el-button size="mini" type="primary">编辑</el-button>
+                  <el-button size="mini" type="primary" @click="editRole(row.id)">编辑</el-button>
                   <el-button size="mini" type="danger" @click="deleteRole(row.id)">删除</el-button>
                 </template>
               </el-table-column>
@@ -57,16 +57,24 @@
         </el-tabs>
       </el-card>
     </div>
+
+    <!-- 弹层组件 -->
+    <setting-dialog ref="dialog" :show-dialog.sync="showDialog" @update="getRoleList" />
   </div>
 </template>
 
 <script>
 import { getRoleList, getCompanyInfoById, deleteRoleById } from '@/api/setting'
 import { mapGetters } from 'vuex'
+import SettingDialog from './components/setting-dialog'
 
 export default {
+  components: {
+    SettingDialog
+  },
   data() {
     return {
+      showDialog: false,
       roleList: [], // 角色列表
       page: {
         page: 1,
@@ -106,6 +114,10 @@ export default {
         this.$message.success('删除成功')
         this.getRoleList()
       })
+    },
+    editRole(id) {
+      this.$refs.dialog.getRoleDetail(id)
+      this.showDialog = true
     }
   }
 }
