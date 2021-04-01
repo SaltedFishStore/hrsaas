@@ -5,13 +5,13 @@
         <tree-tools :tree-node="company" is-root @addDepts="addDepts" />
 
         <el-tree :data="departs" :props="defaultProps" default-expand-all>
-          <tree-tools slot-scope="{ data }" :tree-node="data" @delDepts="getDepartments" @addDepts="addDepts" />
+          <tree-tools slot-scope="{ data }" :tree-node="data" @delDepts="getDepartments" @addDepts="addDepts" @editDepts="editDepts" />
         </el-tree>
       </el-card>
     </div>
 
     <!-- 弹层组件 -->
-    <add-dept :show-dialog.sync="showDialog" :tree-node="node" @addDepts="getDepartments" />
+    <add-dept ref="addDept" :show-dialog.sync="showDialog" :tree-node="node" @addDepts="getDepartments" />
   </div>
 </template>
 
@@ -52,6 +52,12 @@ export default {
       // 显示弹层
       this.showDialog = true
       this.node = node
+    },
+    editDepts(node) {
+      this.showDialog = true
+      this.node = node
+      // 调用子组件方法获取部门详情
+      this.$refs.addDept.getDepartDetail(node.id)
     }
   }
 }

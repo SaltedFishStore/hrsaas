@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { getDepartments, addDepartements } from '@/api/departments'
+import { getDepartments, addDepartements, getDepartDetail, updateDepartments } from '@/api/departments'
 import { getEmployeesSimple } from '@/api/employees'
 
 export default {
@@ -47,8 +47,15 @@ export default {
     const checkNameRepeat = async(rule, value, callback) => {
       // 获取所用部门数据
       const { depts } = await getDepartments()
+      let isRepeat = false
       // 找当前部门下的所用子部门
-      const isRepeat = depts.filter(item => item.pid === this.treeNode.id).some(item => item.name === value)
+      if (this.formData.id) {
+        // 编辑模式
+        isRepeat = false
+      } else {
+        // 新增模式
+        isRepeat = depts.filter(item => item.pid === this.treeNode.id).some(item => item.name === value)
+      }
       isRepeat ? callback(new Error(`同级部门下已经有${value}的部门了`)) : callback()
     }
 
@@ -56,7 +63,15 @@ export default {
     const checkCodeRepeat = async(rule, value, callback) => {
       // 获取所用部门数据
       const { depts } = await getDepartments()
-      const isRepeat = depts.some(item => item.code === value && value)
+      let isRepeat = false
+      if (this.formData.id) {
+        // 编辑模式
+        // 校验除自己外其他部门的code是否相同，并且不为空
+        isRepeat = depts.some(item => item.id !== this.formData.id && item.code === value && value)
+      } else {
+        // 新增模式
+        isRepeat = depts.some(item => item.code === value && value)
+      }
       isRepeat ? callback(new Error(`同级部门下已经有${value}的部门编码了`)) : callback()
     }
     return {
@@ -97,7 +112,13 @@ export default {
       this.$refs.deptForm.validate(async valid => {
         if (valid) {
           // 校验通过
-          await addDepartements({ ...this.formData, pid: this.treeNode.id }) // 调用新增接口，并添加父部门id
+          if (this.formData.id) { // 如果有id，则是编辑状态
+            // 编辑模式
+            await updateDepartments(this.formData)
+          } else {
+            // 新增模式
+            await addDepartements({ ...this.formData, pid: this.treeNode.id }) // 调用新增接口，并添加父部门id
+          }
           this.$emit('addDepts') // 通知父组件新增成功，更新数据
           this.$emit('update:showDialog', false) // 通知父组件关闭弹层
         }
@@ -113,6 +134,11 @@ export default {
       }
       this.$refs.deptForm.resetFields() // 重置校验字段
       this.$emit('update:showDialog', false) // 通知父组件关闭弹层
+    },
+    // 获取部门详情
+    async getDepartDetail(id) {
+      // vue 中prop传值是异步的，这里可能会没有数据，为了保险，不用treeNode
+      this.formData = await getDepartDetail(id)
     }
   }
 }
