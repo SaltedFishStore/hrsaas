@@ -1,7 +1,10 @@
 <template>
   <div class="dashboard-container">
     <div class="app-container">
-      <h2>员工</h2>
+      <page-tools show-before>
+        <template slot="before">123</template>
+        <template slot="after">abc</template>
+      </page-tools>
     </div>
   </div>
 </template>
@@ -10,5 +13,6 @@
 export default {}
 </script>
 
-<style>
+<style lang="scss" scoped>
+
 </style>
