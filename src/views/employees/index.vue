@@ -5,7 +5,7 @@
         <span slot="before">共{{ page.total }}条记录</span>
         <template slot="after">
           <el-button size="small" type="warning" @click="$router.push('/import?type=user')">导入</el-button>
-          <el-button size="small" type="danger">导出</el-button>
+          <el-button size="small" type="danger" @click="exportData">导出</el-button>
           <el-button size="small" type="primary" @click="showDialog = true">新增员工</el-button>
         </template>
       </page-tools>
@@ -58,6 +58,7 @@
 import { getEmployeesList, delEmployee } from '@/api/employees'
 import EmployeesEnum from '@/api/constant/employees'
 import AddEmployee from './components/add-employee'
+import { formatDate } from '@/filters'
 
 export default {
   components: {
@@ -104,6 +105,49 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    // 导出
+    exportData() {
+      // 表头对应关系
+      const headers = {
+        '姓名': 'username',
+        '手机号': 'mobile',
+        '入职日期': 'timeOfEntry',
+        '聘用形式': 'formOfEmployment',
+        '转正日期': 'correctionTime',
+        '工号': 'workNumber',
+        '部门': 'departmentName'
+      }
+      import('@/vendor/Export2Excel').then(async excel => {
+        // 获取所用数据
+        const { rows } = await getEmployeesList({ page: 1, size: this.page.total })
+        const data = this.formtaJSON(headers, rows)
+        excel.export_json_to_excel({
+          header: Object.keys(headers),
+          data,
+          filename: '员工信息表',
+          autoWidth: true,
+          bookType: 'xlsx'
+        })
+      })
+    },
+    // 将数据转成二维数组
+    formtaJSON(headers, rows) {
+      return rows.map(item => {
+        return Object.keys(headers).map(key => {
+          // 将入职日期和转正日期格式化
+          if (headers[key] === 'timeOfEntry' || headers[key] === 'correctionTime') {
+            return formatDate(item[headers[key]])
+          }
+          // 格式化聘用形式
+          if (headers[key] === 'formOfEmployment') {
+            const en = EmployeesEnum.hireType.find(obj => obj.id === item[headers[key]])
+            return en ? en.value : '未知'
+          }
+
+          return item[headers[key]]
+        })
+      })
     }
   }
 }
