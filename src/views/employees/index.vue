@@ -26,13 +26,13 @@
             </template>
           </el-table-column>
           <el-table-column align="center" label="操作" sortable fixed="right" width="280">
-            <template>
+            <template slot-scope="{ row }">
               <el-button type="text" size="small">查看</el-button>
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
               <el-button type="text" size="small">角色</el-button>
-              <el-button type="text" size="small">删除</el-button>
+              <el-button type="text" size="small" @click="deleteElmployee(row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { getEmployeesList } from '@/api/employees'
+import { getEmployeesList, delEmployee } from '@/api/employees'
 import EmployeesEnum from '@/api/constant/employees'
 
 export default {
@@ -86,6 +86,16 @@ export default {
       const hireType = EmployeesEnum.hireType
       const obj = hireType.find(item => item.id === cellValue)
       return obj ? obj.value : '未知'
+    },
+    async deleteElmployee(id) {
+      try {
+        await this.$confirm('是否确定删除该员工吗？')
+        await delEmployee(id)
+        this.getEmployeesList()
+        this.$message.success('删除成功')
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }
