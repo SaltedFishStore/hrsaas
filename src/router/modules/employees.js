@@ -14,6 +14,14 @@ export default {
         title: '员工管理',
         icon: 'people'
       }
+    },
+    {
+      path: 'detail/:id?', // 动态路由传参
+      hidden: true,
+      component: () => import('@/views/employees/detail'),
+      meta: {
+        title: '员工详情'
+      }
     }
   ]
 }
