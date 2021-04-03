@@ -244,10 +244,10 @@
           <el-input v-model="formData.graduateSchool" placeholder="请输入" class="inputW2" />
         </el-form-item>
         <el-form-item label="入学时间">
-          <el-date-picker v-model="formData.enrolmentTime" type="data" placeholder="请输入时间" class="inputW" value-format="yyyy-MM-dd" />
+          <el-date-picker v-model="formData.enrolmentTime" type="date" placeholder="请输入时间" class="inputW" value-format="yyyy-MM-dd" />
         </el-form-item>
         <el-form-item label="毕业时间">
-          <el-date-picker v-model="formData.graduationTime" type="data" placeholder="请输入时间" class="inputW" value-format="yyyy-MM-dd" />
+          <el-date-picker v-model="formData.graduationTime" type="date" placeholder="请输入时间" class="inputW" value-format="yyyy-MM-dd" />
         </el-form-item>
         <el-form-item label="专业">
           <el-input v-model="formData.major" placeholder="请输入" class="inputW" />
@@ -284,6 +284,8 @@
 
 <script>
 import EmployeeEnum from '@/api/constant/employees'
+import { saveUserDetailById, getPersonalDetail, updatePersonal } from '@/api/employees'
+import { getUserDetailById } from '@/api/user'
 
 export default {
   data() {
@@ -354,6 +356,26 @@ export default {
         proofOfDepartureOfFormerCompany: '', // 前公司离职证明
         remarks: '' // 备注
       }
+    }
+  },
+  created() {
+    this.getUserDetailById()
+    this.getPersonalDetail()
+  },
+  methods: {
+    async getUserDetailById() {
+      this.userInfo = await getUserDetailById(this.userId)
+    },
+    async getPersonalDetail() {
+      this.formData = await getPersonalDetail(this.userId)
+    },
+    async saveUser() {
+      await saveUserDetailById(this.userInfo)
+      this.$message.success('保存成功')
+    },
+    async savePersonal() {
+      await updatePersonal(this.formData)
+      this.$message.success('保存成功')
     }
   }
 }
