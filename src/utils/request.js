@@ -37,7 +37,7 @@ service.interceptors.response.use(
     if (success) {
       return data // 成功直接返回数据
     } else {
-      Message(message) // 提示错误
+      Message.error(message) // 提示错误
       return Promise.reject(new Error(message)) // 返回错误
     }
   },
@@ -48,7 +48,7 @@ service.interceptors.response.use(
       router.push('/login') // 回到登录页
       return Promise.reject(new Error('超时了')) // 返回错误
     } else {
-      Message(error.message) // 提示错误
+      Message.error(error.message) // 提示错误
       return Promise.reject(error) // 返回错误
     }
   }

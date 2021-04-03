@@ -1,8 +1,10 @@
 // 改文件负责所有公共组件的全局注册
 import PageTools from './pageTools'
+import UploadExcel from './UploadExcel'
 
 const components = [
-  PageTools
+  PageTools,
+  UploadExcel
 ]
 
 export default {
