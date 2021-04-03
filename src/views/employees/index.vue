@@ -15,10 +15,16 @@
           <el-table-column align="center" label="序号" sortable type="index" />
           <el-table-column align="center" label="姓名" sortable prop="username" />
           <el-table-column align="center" label="工号" sortable prop="workNumber" />
-          <el-table-column align="center" label="聘用形式" sortable prop="formOfEmployment" />
+          <el-table-column align="center" label="聘用形式" sortable prop="formOfEmployment" :formatter="formEmployment" />
           <el-table-column align="center" label="部门" sortable prop="departmentName" />
-          <el-table-column align="center" label="入职时间" sortable prop="timeOfEntry" />
-          <el-table-column align="center" label="账户状态" sortable prop="enableState" />
+          <el-table-column align="center" label="入职时间" sortable prop="timeOfEntry">
+            <template slot-scope="{ row }">{{ row.timeOfEntry | formatDate }}</template>
+          </el-table-column>
+          <el-table-column align="center" label="账户状态" sortable prop="enableState">
+            <template slot-scope="{ row }">
+              <el-switch :value="row.enableState === 1" />
+            </template>
+          </el-table-column>
           <el-table-column align="center" label="操作" sortable fixed="right" width="280">
             <template>
               <el-button type="text" size="small">查看</el-button>
@@ -47,6 +53,7 @@
 
 <script>
 import { getEmployeesList } from '@/api/employees'
+import EmployeesEnum from '@/api/constant/employees'
 
 export default {
   data() {
@@ -74,6 +81,11 @@ export default {
     pageChange(newPage) {
       this.page.page = newPage
       this.getEmployeesList()
+    },
+    formEmployment(row, column, cellValue, index) {
+      const hireType = EmployeesEnum.hireType
+      const obj = hireType.find(item => item.id === cellValue)
+      return obj ? obj.value : '未知'
     }
   }
 }
