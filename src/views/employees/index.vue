@@ -31,7 +31,7 @@
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
-              <el-button type="text" size="small">角色</el-button>
+              <el-button type="text" size="small" @click="editRole(row.id)">角色</el-button>
               <el-button type="text" size="small" @click="deleteElmployee(row.id)">删除</el-button>
             </template>
           </el-table-column>
@@ -51,6 +51,8 @@
 
     <!-- 弹层组件 -->
     <add-employee :show-dialog.sync="showDialog" />
+    <!-- 分配角色弹层 -->
+    <assign-role ref="assignRole" :show-role-dialog.sync="showRoleDialog" :user-id="userId" />
   </div>
 </template>
 
@@ -59,27 +61,37 @@ import { getEmployeesList, delEmployee } from '@/api/employees'
 import EmployeesEnum from '@/api/constant/employees'
 import AddEmployee from './components/add-employee'
 import { formatDate } from '@/filters'
+import AssignRole from './components/assign-role'
 
 export default {
   components: {
-    AddEmployee
+    AddEmployee,
+    AssignRole
   },
   data() {
     return {
       showDialog: false,
+      showRoleDialog: false,
       employeesList: [], // 员工列表
       page: {
         page: 1,
         size: 5,
         total: 0
       },
-      loading: false
+      loading: false,
+      userId: null
     }
   },
   created() {
     this.getEmployeesList()
   },
   methods: {
+    async editRole(id) {
+      this.userId = id
+      // 调用子组件获取员工角色
+      await this.$refs.assignRole.getUserDetailById(id)
+      this.showRoleDialog = true
+    },
     async getEmployeesList() {
       this.loading = true
       const { total, rows } = await getEmployeesList(this.page)
