@@ -14,7 +14,7 @@
               <el-table-column header-align="center" prop="description" label="角色描述" />
               <el-table-column header-align="center" align="center" label="操作">
                 <template slot-scope="{ row }">
-                  <el-button size="mini" type="success">分配权限</el-button>
+                  <el-button size="mini" type="success" @click="assignPerm(row.id)">分配权限</el-button>
                   <el-button size="mini" type="primary" @click="editRole(row.id)">编辑</el-button>
                   <el-button size="mini" type="danger" @click="deleteRole(row.id)">删除</el-button>
                 </template>
@@ -60,17 +60,21 @@
 
     <!-- 弹层组件 -->
     <setting-dialog ref="dialog" :show-dialog.sync="showDialog" @update="getRoleList" />
+    <!-- 分配权限弹层 -->
+    <allot-auth-dialog ref="permDialog" :show-per-dialog.sync="showPerDialog" />
   </div>
 </template>
 
 <script>
-import { getRoleList, getCompanyInfoById, deleteRoleById } from '@/api/setting'
+import { getRoleList, getCompanyInfoById, deleteRoleById, getRoleDetail } from '@/api/setting'
 import { mapGetters } from 'vuex'
 import SettingDialog from './components/setting-dialog'
+import AllotAuthDialog from './components/allot-auth-dialog'
 
 export default {
   components: {
-    SettingDialog
+    SettingDialog,
+    AllotAuthDialog
   },
   data() {
     return {
@@ -82,7 +86,8 @@ export default {
         total: 0
       },
       loading: false,
-      formData: {} // 接收企业数据
+      formData: {}, // 接收企业数据
+      showPerDialog: false // 分配权限弹层显示隐藏
     }
   },
   computed: {
@@ -118,6 +123,13 @@ export default {
     editRole(id) {
       this.$refs.dialog.getRoleDetail(id)
       this.showDialog = true
+    },
+    async assignPerm(id) {
+      const { permIds } = await getRoleDetail(id)
+      await this.$refs.permDialog.getPermissionList()
+      this.$refs.permDialog.permIds = permIds
+      this.$refs.permDialog.roleId = id
+      this.showPerDialog = true
     }
   }
 }
