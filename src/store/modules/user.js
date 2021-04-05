@@ -1,5 +1,6 @@
 import { getToken, setToken, removeToken, SetTimestamp } from '@/utils/auth'
 import { login, getUserInfo, getUserDetailById } from '@/api/user'
+import { resetRouter } from '@/router'
 
 const state = {
   token: getToken(), // token初始状态
@@ -44,6 +45,9 @@ const actions = {
   lgout(context) {
     context.commit('removeToken') // 删除token
     context.commit('removeUserInfo') // 删除用户信息
+    resetRouter() // 重置路由
+    // 子模块调用子模块的action，第三个参数设置为root：true，则表示父模块调用子模块action
+    context.commit('permission/setRoutes', [], { root: true })
   }
 }
 

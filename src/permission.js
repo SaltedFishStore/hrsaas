@@ -20,7 +20,8 @@ router.beforeEach(async(to, from, next) => {
         const { roles } = await store.dispatch('user/getUserInfo')
         // roles.menus  权限标识，需要和路由模块对应，进行筛选，筛选得到的权限进行 addRouters 并写入 vuex 中
         const routes = await store.dispatch('permission/filterRoutes', roles.menus)
-        router.addRoutes(routes) // 将得到的动态路由添加到路由表
+        // 404 page must be placed at the end !!!
+        router.addRoutes([...routes, { path: '*', redirect: '/404', hidden: true }]) // 将得到的动态路由添加到路由表
         // 如果使用了addRoutes，应该使用next(to.path)，否则页面刷新会导致路由权限失效
         next(to.path)
       }
