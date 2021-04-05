@@ -8,7 +8,7 @@
         </h3>
       </div>
 
-      <el-form :model="loginForm" ref="loginFrom" :rules="loginRules">
+      <el-form ref="loginFrom" :model="loginForm" :rules="loginRules">
         <el-form-item prop="mobile">
           <span class="svg-container">
             <svg-icon icon-class="user" />
@@ -109,10 +109,14 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(async valid => {
         if (valid) {
-          this.loading = true // 按钮添加loading效果
-          await this['user/login'](this.loginForm) // 调用登录接口
-          this.loading = false // 取消loading效果
-          this.$router.push('/') // 跳转到首页
+          try {
+            this.loading = true // 按钮添加loading效果
+            await this['user/login'](this.loginForm) // 调用登录接口
+            this.loading = false // 取消loading效果
+            this.$router.push('/') // 跳转到首页
+          } catch (error) {
+            this.loading = false // 失败之后关闭转圈
+          }
         } else {
           this.loading = false // 失败之后关闭转圈
           return false
